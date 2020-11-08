@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.exceptions.DomainException;
+
 import java.util.Date;
 
 public class CarRental {
@@ -13,7 +15,14 @@ public class CarRental {
     public CarRental() {
     }
 
-    public CarRental(Date start, Date finish, Vehicle vehicle) {
+    public CarRental(Date start, Date finish, Vehicle vehicle) throws DomainException {
+        Date now = new Date();
+        if (start.before(now) || finish.before(now)){
+            throw new DomainException("Reservation dates must be future dates");
+        }
+        if (!finish.after(start)){
+            throw new DomainException("Finish date must be after start date");
+        }
         this.start = start;
         this.finish = finish;
         this.vehicle = vehicle;
